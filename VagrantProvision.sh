@@ -20,6 +20,7 @@ virtualenv --python=python2.7 osmose-backend-venv
 source osmose-backend-venv/bin/activate
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
+deactivate
 
 ## Install Database
 sudo su - postgres
@@ -34,77 +35,20 @@ psql -c "GRANT SELECT,UPDATE,DELETE,INSERT ON TABLE geometry_columns TO osmose;"
 exit
 
 # Install Java 8
-sudo apt install openjdk-8-jre-headless  # requires 'Y'
+sudo apt-get install -y openjdk-8-jre-headless
 
 ## Configure Backend
-# Configure the url_frontend_update in modules/config.py to url to where your frontend will live
 # Configure database connection strings in osmose_config.py
 db_base = osmose # database name
 db_user = osmose # database user
-db_password = # database password if needed
-db_host = # database hostname if needed
+db_password = None # database password if needed
+db_host = None # database hostname if needed
 
-# Configure osmose frontend password
-# vim osmose_config_password.py
-# def set_password(config):
-#   for country in config.keys():
-#     for k in config[country].analyser.keys():
-#       config[country].analyser[k] = 'foo'
+# Set all options to trust in pg_hba.conf
+
+## Update dir_work in modules/config.py
+dir_work = "/usr/local/osmose-backend/data/work/%s" % (username)
 
 ## Test backend
 ./osmose_run.py -h
 
-## Install Frontend
-# Clone repo
-cd /usr/local/
-cd osmose-frontend/
-
-# Create Frontend Virtual-env
-virtualenv --python=python2.7 osmose-frontend-venv
-source osmose-frontend-venv/bin/activate
-pip install -r requirements.txt
-
-# Generate Translation Files
-cd po && make mo
-
-## Create frontend database
-sudo su - postgres
-# Set your own password
-createdb -E UTF8 -T template0 -O osmose osmose_frontend
-# Enable extensions
-psql -c "CREATE extension hstore" osmose_frontend
-
-## Edit Frontend Schema
-# Edit tools/database/schema.sql
-
-# Change source table id value from INTEGER to SERIAL
-# Put this at the bottom of the file
-
-# --
-# -- Name: grant privs to marker and source id sequences
-# --
-# GRANT ALL ON sequence marker_id_seq TO osmose;
-# GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO osmose;
-# grant all on sequence source_password_source_id_seq to osmose;
-# grant all on sequence source_id_seq to osmose;
-
-## Migrate Schema
-sudo su - postgres
-psql osmose_frontend -f /usr/local/osmose-frontend/tools/database/schema.sql
-
-# Generate Markers
-cd ../tools && ./make-markers.py
-
-# Install Javascript libraries
-npm install
-npm run build
-
-## Setup single country with all Analyzers from backend
-# Run usa_hawaii.sql file to import country analyzers (usa_hawaii is the example - you can change the country name for whichever you want to import)
-
-sudo su - postgres
-psql osmose_frontend -f /usr/local/osmose-frontend/usa_hawaii.sql
-
-# Import Country data to osmose-frontend
-cd /usr/local/osmose-backend
-./osmose_run.py --country=usa_hawaii
