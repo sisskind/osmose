@@ -10,8 +10,6 @@ sudo apt-get install -y gettext postgresql postgresql-contrib postgis python2.7 
 ## Install Backend
 # Clone repo
 cd /usr/local
-# sudo git clone https://github.com/osm-fr/osmose-backend
-sudo chown -R ubuntu:ubuntu osmose-backend
 cd osmose-backend
 
 ## Make data results directory
@@ -60,8 +58,6 @@ db_host = # database hostname if needed
 ## Install Frontend
 # Clone repo
 cd /usr/local/
-#sudo git clone https://github.com/osm-fr/osmose-frontend
-sudo chown -R ubuntu:ubuntu osmose-frontend
 cd osmose-frontend/
 
 # Create Frontend Virtual-env
