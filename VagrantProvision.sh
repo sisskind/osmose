@@ -3,6 +3,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+source ~/.bashrc
 nvm install 9
 sudo apt-get install -y gettext postgresql postgresql-contrib postgis python2.7 python2.7-dev virtualenv gcc pkg-config libpng-dev libjpeg-dev libfreetype6-dev postgresql-server-dev-all libgeos-dev g++ python-shapely python-dateutil python-imposm-parser python-lockfile python-polib python-poster python-psycopg2 python-shapely python-regex git python-dev python-virtualenv libpq-dev protobuf-compiler libprotobuf-dev apache2 apache2-dev
 
