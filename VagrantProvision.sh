@@ -12,9 +12,8 @@ sudo apt-get install -y gettext postgresql postgresql-contrib postgis python2.7 
 cd /usr/local
 cd osmose-backend
 
-## Make data results directory
-mkdir -p data/work/ubuntu
-mkdir -p data/work/ubuntu/cache
+## Make data extracts directory
+mkdir -p data/work/vagrant/extracts
 
 ## Setup Python Virtual-env
 virtualenv --python=python2.7 osmose-backend-venv
